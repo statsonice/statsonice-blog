@@ -1,4 +1,4 @@
 <?php
-echo 'asdf';
-`/bin/bash /home/statsonice_production/scripts/deploy.sh`;
+echo 'Starting Deployment';
+echo `/bin/bash /home/statsonice_production/scripts/deploy.sh`;
 ?>
