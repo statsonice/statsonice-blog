@@ -1,6 +1,6 @@
 <?php
-$production_deployment = `/bin/bash /home/statsonice_production/scripts/deploy_production.sh`;
-$staging_deployment = `/bin/bash /home/statsonice_staging/scripts/deploy_staging.sh`;
+$production_deployment = `/bin/bash /home/statsonice_production/scripts/deploy.sh production`;
+$staging_deployment = `/bin/bash /home/statsonice_staging/scripts/deploy.sh master`;
 
 $message =  '<h1>';
 $message .=  "Production Deployment";
