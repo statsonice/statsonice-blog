@@ -1,6 +1,6 @@
 <?php
-$production_deployment = `/bin/bash /home/statsonice_production/scripts/deploy.sh production`;
-$staging_deployment = `/bin/bash /home/statsonice_staging/scripts/deploy.sh master`;
+$production_deployment = `/bin/bash /home/statsonice_production/scripts/deploy.sh production 2>&1`;
+$staging_deployment = `/bin/bash /home/statsonice_staging/scripts/deploy.sh master 2>&1`;
 
 $message = '';
 if(strpos($production_deployment, "No new code to deploy") === False){
