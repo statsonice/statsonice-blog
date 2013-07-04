@@ -1,15 +1,15 @@
 <?php
 /*
  * Plugin Name: Google Analyticator
- * Version: 6.4.4.2
- * Plugin URI: http://wordpress.org/extend/plugins/google-analyticator/
+ * Version: 6.4.4.3
+ * Plugin URI: http://www.videousermanuals.com/google-analyticator/?utm_campaign=analyticator&utm_medium=plugin&utm_source=readme-txt
  * Description: Adds the necessary JavaScript code to enable <a href="http://www.google.com/analytics/">Google's Analytics</a>. After enabling this plugin you need to authenticate with Google, then select your domain and you're set.
- * Author: Video User Manuals
- * Author URI: http://www.videousermanuals.com
+ * Author: Video User Manuals Pty Ltd
+ * Author URI: http://www.videousermanuals.com/?utm_campaign=analyticator&utm_medium=plugin&utm_source=readme-txt
  * Text Domain: google-analyticator
  */
 
-define('GOOGLE_ANALYTICATOR_VERSION', '6.4.4.2');
+define('GOOGLE_ANALYTICATOR_VERSION', '6.4.4.3');
 
 define('GOOGLE_ANALYTICATOR_CLIENTID', '1007949979410.apps.googleusercontent.com');
 define('GOOGLE_ANALYTICATOR_CLIENTSECRET', 'q06U41XDXtzaXD14E-KO1hti'); //don't worry - this don't need to be secret in our case
@@ -776,7 +776,9 @@ function ga_options_page() {
 
                 </form>
 
-
+                 </form>
+ 
+ 
 <?php  if (!get_option('wpm_o_user_id')): ?>
     <img src="<?php echo plugins_url('ga-plugin-advert.jpg', __FILE__ ); ?>" alt="Google Analytics Getting It Right" />
     <form accept-charset="utf-8" action="https://app.getresponse.com/add_contact_webform.html" method="post" onsubmit="return quickValidate()" target="_blank">
@@ -796,29 +798,26 @@ function ga_options_page() {
     </tr>
     </table>
     </form>
+
+    <script type="text/javascript">
+	function quickValidate()
+	{
+	        if (! jQuery('#sub_name').val() )
+	            {
+	                alert('Your Name is required');
+	                return false;
+	            }
+	        if(! jQuery('#sub_email').val() )
+	            {
+	                alert('Your Email is required');
+	                return false;
+	            }
+
+	            return true;
+	}
+	</script>
 <?php endif;?>
 
-<script type="text/javascript">
-function quickValidate()
-{
-        if (! jQuery('#sub_name').val() )
-            {
-                alert('Your Name is required');
-                return false;
-            }
-        if(! jQuery('#sub_email').val() )
-            {
-                alert('Your Email is required');
-                return false;
-            }
-
-            return true;
-
-}
-</script>
-
-		</div>
-		</form>
 
 <?php
 }
