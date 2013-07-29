@@ -1,4 +1,27 @@
 <?php
+
+### Authentication ###
+function getIP(){
+    //Check IP Address
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])){   //check ip from share internet
+      $ip=$_SERVER['HTTP_CLIENT_IP'];
+    }elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){   //to check ip is pass from proxy
+      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+    }else{
+      $ip=$_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
+$requesterIP = getIP();
+if(strpos('204.232.175',$requesterIP) === false && strpos('192.30.25',$requesterIP) === false){
+    echo 'IP Address not accepted<br />';
+    echo $requesterIP;
+    die();
+}
+
+
+### Deployment ###
 $production_deployment = `/bin/bash /home/statsonice_production/scripts/deploy.sh production 2>&1`;
 $staging_deployment = `/bin/bash /home/statsonice_staging/scripts/deploy.sh master 2>&1`;
 
