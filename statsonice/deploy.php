@@ -14,7 +14,7 @@ function getIP(){
 }
 
 $requesterIP = getIP();
-if(strpos('204.232.175',$requesterIP) === false && strpos('192.30.25',$requesterIP) === false){
+if(strpos($requesterIP, '204.232.175') === false && strpos($requesterIP, '192.30.25') === false){
     echo 'IP Address not accepted<br />';
     echo $requesterIP;
     die();
