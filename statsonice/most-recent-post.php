@@ -1,5 +1,5 @@
 <?php
-require('wp-load.php');
+require('../wp-load.php');
 $recent_posts = wp_get_recent_posts();
 $recent_post = $recent_posts[0];
 // print_r($recent_post);
