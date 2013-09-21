@@ -12,4 +12,4 @@ You will need to manually SSH into the server and `git pull` to update the produ
 
 Issues And Development
 ----------------------
-All issue tickets will be handled on the main statsonice blog
+All issue tickets will be handled on the main statsonice repository
