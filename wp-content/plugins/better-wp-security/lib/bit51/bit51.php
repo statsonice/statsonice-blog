@@ -22,7 +22,6 @@ if ( ! class_exists( 'Bit51Foo' ) ) {
 		function init() {
 			add_filter( 'foolic_validation_include_css-' . $this->hook, array( &$this, 'include_foolic_css' ) );
 			add_filter( 'foolic_validation_input_type-' . $this->hook, array( &$this, 'change_foolic_input_type' ) );
-			add_filter( 'foolic_validation_input_size-' . $this->hook, array( &$this, 'change_foolic_input_size' ) );
 			new foolic_validation_v1_1( 'http://fooplugins.com/api/better-wp-security/check', $this->hook );
 			add_action('wp_ajax_' . $this->hook . '_support', array($this, 'ajax_submit_ticket'));
 		}
@@ -354,22 +353,25 @@ if ( ! class_exists( 'Bit51Foo' ) ) {
 			?>
 				<div id="mc_embed_signup">
 					<form action="http://ithemes.us2.list-manage.com/subscribe/post?u=7acf83c7a47b32c740ad94a4e&amp;id=5176bfed9e" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-						<p><?php _e( 'Signup to get the latest WP security updates and news and releases from iThemes.', 'better-wp-security'); ?></p>
+						<div style="text-align: center;">
+							<img src="<?php echo BWPS_PU; ?>/lib/bit51/images/security-pocketguide-sidebar.png" width="145" height="187" alt="WordPress Security - A Pocket Guide">
+						</div>
+						<p><?php _e( 'Get quick tips for securing your site + the latest WordPress security updates, news and releases from iThemes.', 'better-wp-security'); ?></p>
 						<div id="mce-responses" class="clear">
 							<div class="response" id="mce-error-response" style="display:none"></div>
 							<div class="response" id="mce-success-response" style="display:none"></div>
 						</div>
 							<label for="mce-EMAIL" style="display: block;margin-bottom: 3px;"><?php _e( 'Email Address', 'better-wp-security' ); ?></label>
-							<input type="email" size="29" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="email@domain.com">
+							<input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL" placeholder="email@domain.com">
 							<br/><br/>
-							<input type="submit" value="<?php _e( 'Subscribe', 'better-wp-security' ); ?>" name="subscribe" id="mc-embedded-subscribe" class="button button-primary">
+							<input style="background: #A8D657; border-color: #8FB944; color: #4c5559;" type="submit" value="<?php _e( 'Subscribe', 'better-wp-security' ); ?>" name="subscribe" id="mc-embedded-subscribe" class="button button-primary">
 					</form>
 				</div>
 			<?php
 			
 			$content = ob_get_clean();
 			
-			$this->postbox( 'email-signup', __( 'Get WP Security Updates' , $this->hook ), $content ); //setup the postbox
+			$this->postbox( 'email-signup', __( 'Download Our WordPress Security Pocket Guide' , $this->hook ), $content ); //setup the postbox
 		}
 
 		/**
@@ -392,6 +394,9 @@ if ( ! class_exists( 'Bit51Foo' ) ) {
 		 *
 		 **/
 		function support() {
+
+			global $current_user; 
+
 			$purchase_url = 'http://fooplugins.com/plugins/better-wp-security/';
 
 			$data = apply_filters( 'foolic_get_validation_data-' . $this->hook, false );
@@ -405,6 +410,8 @@ if ( ! class_exists( 'Bit51Foo' ) ) {
 				$content .= '<input type="hidden" name="action" value="' . $this->hook . '_support" />';
 				$content .= '<input type="hidden" name="nonce" value="' . wp_create_nonce($this->hook . '_ajax-nonce') . '" />';
 				$content .= '<input type="hidden" name="ticket_key" value="' . $data['license'] . '" />';
+				$content .= '<label for="support_email">' . __( 'Your Email Address', $this->hook ). ':</label><input type="text" name="email" value="' . $current_user->user_email . '" id="support_email">';
+				$content .= '<label for="support_name">' . __( 'Your Name', $this->hook ). ':</label><input type="text" name="name" value="' . $current_user->display_name . '" id="support_name">';
 				$content .= '<label for="support_issue">' . __( 'Describe the Issue', $this->hook ). ':</label><textarea name="issue" style="height:100px; display:block; width:100%; border:solid 1px #aaa;" class="regular-text" id="support_issue"></textarea>';
 				$content .= '<label for="support_reproduce">' . __( 'Steps to Reproduce', $this->hook ). ':</label><textarea name="reproduce" style="height:200px; display:block; width:100%; border:solid 1px #aaa;" class="regular-text" id="support_reproduce"></textarea>';
 				$content .= '<label for="support_other">' . __( 'Other Information', $this->hook ). ':</label><textarea name="other" style="height:100px; display:block; width:100%; border:solid 1px #aaa;" class="regular-text" id="support_other"></textarea><br />';
@@ -635,19 +642,17 @@ if ( ! class_exists( 'Bit51Foo' ) ) {
 			return 'text';
 		}
 
-		function change_foolic_input_size() {
-			return '29';
-		}
-
 		function ajax_submit_ticket() {
 			global $wp_version;
 			global $current_user;
 
-			if (wp_verify_nonce($_REQUEST['nonce'], $this->hook . '_ajax-nonce')) {
-				$issue = $_REQUEST['issue'];
-				$reproduce = $_REQUEST['reproduce'];
-				$other = $_REQUEST['other'];
-				$ticket_key = $_REQUEST['ticket_key'];
+			if (wp_verify_nonce(filter_var( $_REQUEST['nonce'], FILTER_SANITIZE_STRING ), $this->hook . '_ajax-nonce')) {
+				$email = filter_var( $_REQUEST['email'], FILTER_SANITIZE_STRING );
+				$name = filter_var( $_REQUEST['name'], FILTER_SANITIZE_STRING );
+				$issue = filter_var( $_REQUEST['issue'], FILTER_SANITIZE_STRING );
+				$reproduce = filter_var( $_REQUEST['reproduce'], FILTER_SANITIZE_STRING );
+				$other = filter_var( $_REQUEST['other'], FILTER_SANITIZE_STRING );
+				$ticket_key = filter_var( $_REQUEST['ticket_key'], FILTER_SANITIZE_STRING );
 				get_currentuserinfo();
 
 				$message = '<table>
@@ -658,18 +663,22 @@ if ( ! class_exists( 'Bit51Foo' ) ) {
 				<tr><td>' . __('Plugin Version', $this->hook) . '</td><td>' . $this->pluginversion . '</td></tr>
 				<tr><td>' . __('WP Version', $this->hook) . '</td><td>' . $wp_version . '</td></tr>
 				<tr><td>' . __('Website', $this->hook) . '</td><td>' . home_url() . '</td></tr>
-				<tr><td>' . __('Email', $this->hook) . '</td><td>' . $current_user->user_email . '</td></tr>
-				<tr><td>' . __('Name', $this->hook) . '</td><td>' . $current_user->display_name . '</td></tr>
+				<tr><td>' . __('Email', $this->hook) . '</td><td>' . $email. '</td></tr>
+				<tr><td>' . __('Name', $this->hook) . '</td><td>' . $name . '</td></tr>
 				</table>';
 
 				add_filter( 'wp_mail_content_type', array($this, 'set_html_content_type' ) );
+
 				if ( function_exists( 'wp_mail' ) ) {
+					
 					wp_mail(
 						$this->support_email,
-						__('Better WP Security Support Ticket', $this->hook),
-						$message
+						__('Better WP Security Support Ticket', 'better-wp-security'),
+						$message,
+						'From: ' . $name . ' <' . $email . '>' . PHP_EOL
 					);
 				}
+
 				remove_filter( 'wp_mail_content_type', array($this, 'set_html_content_type' ) ); // reset content-type to to avoid conflicts
 			}
 		}
