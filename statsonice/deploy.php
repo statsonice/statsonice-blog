@@ -25,13 +25,16 @@ if(strpos($requesterIP, '204.232.175') === false && strpos($requesterIP, '192.30
 $production_deployment = `/bin/bash /home/statsonice_production/scripts/deploy.sh production 2>&1`;
 $staging_deployment = `/bin/bash /home/statsonice_staging/scripts/deploy.sh master 2>&1`;
 
+$subject = '';
 $message = '';
 if(strpos($production_deployment, "No new code to deploy") === False){
+    $subject = "Production Deployment Log";
     $message .=  "Production Deployment\n\n";
     $message .=  $production_deployment;
 }
 
 if(strpos($staging_deployment, "No new code to deploy") === False){
+    $subject = "Staging Deployment Log";
     $message .= "Staging Deployment\n\n";
     $message .=  $staging_deployment;
 }
@@ -40,7 +43,6 @@ echo '<br />';
 
 if($message != ''){
     $to = 'admin@statsonice.com';
-    $subject = 'Deployment Log';
     $headers = "From: " . strip_tags('statsonice-deploy@statsonice.com') . "\r\n";
     
     mail($to, $subject, $message, $headers);
