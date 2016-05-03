@@ -1,3 +1,7 @@
+Warning: Do not deploy without updating wordpress
+=================================================
+This repository is badly out of date and requires security patches
+
 statsonice-blog
 ===============
 
